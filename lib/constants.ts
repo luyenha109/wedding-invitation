@@ -1,8 +1,10 @@
 export const APPS_SCRIPT_URL =
   process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ?? "";
 
+export const APPS_SCRIPT_ENABLED = APPS_SCRIPT_URL.trim() !== "";
+
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://arga-nimas.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://luyen-tho-wedding.vercel.app";
 
 export const RSVP_COOLDOWN_MS = 30_000;
 export const GUESTBOOK_COOLDOWN_MS = 15_000;
@@ -19,9 +21,9 @@ export const ACTIONS = {
 } as const;
 
 export const ATTENDANCE_OPTIONS = [
-  { value: "attending" as const, label: "Hadir" },
-  { value: "not_attending" as const, label: "Tidak Hadir" },
-  { value: "maybe" as const, label: "Mungkin Hadir" },
+  { value: "attending" as const, label: "Tham dự" },
+  { value: "not_attending" as const, label: "Không thể tham dự" },
+  { value: "maybe" as const, label: "Chưa chắc chắn" },
 ] as const;
 
 export const ANIMATION_DURATION = {
@@ -37,4 +39,4 @@ export const EASING = {
   inExpo: [0.95, 0.05, 0.795, 0.035] as const,
 };
 
-export const WEDDING_DATE = new Date("2026-12-20T08:00:00+07:00");
+export const WEDDING_DATE = new Date("2026-11-28T11:00:00+07:00");

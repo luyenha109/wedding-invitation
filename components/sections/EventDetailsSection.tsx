@@ -9,8 +9,11 @@ interface EventCardProps {
   delay?: number;
 }
 
-function EventCard({ detail, delay = 0 }: EventCardProps) {
-  const displayDate = new Date(detail.date).toLocaleDateString("id-ID", {
+function EventCard({ 
+  detail, 
+  delay = 0 
+}: EventCardProps) {
+  const displayDate = new Date(detail.date).toLocaleDateString("vi-VN", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -54,7 +57,7 @@ function EventCard({ detail, delay = 0 }: EventCardProps) {
                 {detail.venue}
               </p>
               <p className="font-sans text-xs text-[color:var(--text-muted)]">
-                {detail.address}, {detail.city}
+                {detail.address}
               </p>
             </div>
           </div>
@@ -65,10 +68,10 @@ function EventCard({ detail, delay = 0 }: EventCardProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl border border-[#D4AF37]/40 px-5 py-3 text-sm font-medium text-[#D4AF37] transition-all duration-300 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] w-fit"
-          aria-label={`Buka ${detail.mapsLabel} di Google Maps`}
+          aria-label={`Mở ${detail.mapsLabel} trên Google Maps`}
         >
           <MapPin className="h-3.5 w-3.5" aria-hidden />
-          Buka Google Maps
+          Mở Google Maps
           <ExternalLink className="h-3 w-3 opacity-60" aria-hidden />
         </a>
       </article>
@@ -83,7 +86,7 @@ export function EventDetailsSection() {
     <section
       id="event"
       className="relative py-24 section-padding overflow-hidden"
-      aria-label="Detail acara pernikahan"
+      aria-label="Chi tiết đám cưới"
     >
       <AnimatedGradient className="z-0 opacity-50" />
 
@@ -91,15 +94,14 @@ export function EventDetailsSection() {
         <Reveal direction="up">
           <div className="mb-14 flex flex-col items-center gap-3 text-center">
             <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-              Informasi Acara
+              Thông Tin Sự Kiện
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
-              Detail Pernikahan
+              Chi Tiết Đám Cưới
             </h2>
             <div className="gold-divider w-24" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-md text-balance">
-              Dengan penuh kebahagiaan, kami mengundang Anda untuk hadir dan
-              memberikan doa restu.
+              
             </p>
           </div>
         </Reveal>

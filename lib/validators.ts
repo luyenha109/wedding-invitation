@@ -9,20 +9,20 @@ import {
 export const rsvpSchema = z.object({
   name: z
     .string()
-    .min(2, "Nama minimal 2 karakter")
-    .max(MAX_NAME_LENGTH, `Nama maksimal ${MAX_NAME_LENGTH} karakter`)
-    .regex(/^[a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF'-]+$/, "Nama tidak valid"),
+    .min(2, "Tên tối thiểu 2 ký tự")
+    .max(MAX_NAME_LENGTH, `Tên tối đa ${MAX_NAME_LENGTH} ký tự`)
+    .regex(/^[a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF'-]+$/, "Tên không hợp lệ"),
   attendance: z.enum(["attending", "not_attending", "maybe"], {
-    errorMap: () => ({ message: "Pilih status kehadiran" }),
+    errorMap: () => ({ message: "Chọn trạng thái tham dự" }),
   }),
   guestCount: z
     .number()
     .int()
-    .min(MIN_GUEST_COUNT, `Minimal ${MIN_GUEST_COUNT} tamu`)
-    .max(MAX_GUEST_COUNT, `Maksimal ${MAX_GUEST_COUNT} tamu`),
+    .min(MIN_GUEST_COUNT, `Tối thiểu ${MIN_GUEST_COUNT} khách`)
+    .max(MAX_GUEST_COUNT, `Tối đa ${MAX_GUEST_COUNT} khách`),
   message: z
     .string()
-    .max(MAX_MESSAGE_LENGTH, `Pesan maksimal ${MAX_MESSAGE_LENGTH} karakter`)
+    .max(MAX_MESSAGE_LENGTH, `Lời nhắn tối đa ${MAX_MESSAGE_LENGTH} ký tự`)
     .optional()
     .default(""),
 });
@@ -30,13 +30,13 @@ export const rsvpSchema = z.object({
 export const guestbookSchema = z.object({
   name: z
     .string()
-    .min(2, "Nama minimal 2 karakter")
-    .max(MAX_NAME_LENGTH, `Nama maksimal ${MAX_NAME_LENGTH} karakter`)
-    .regex(/^[a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF'-]+$/, "Nama tidak valid"),
+    .min(2, "Tên tối thiểu 2 ký tự")
+    .max(MAX_NAME_LENGTH, `Tên tối đa ${MAX_NAME_LENGTH} ký tự`)
+    .regex(/^[a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF'-]+$/, "Tên không hợp lệ"),
   message: z
     .string()
-    .min(5, "Pesan minimal 5 karakter")
-    .max(MAX_MESSAGE_LENGTH, `Pesan maksimal ${MAX_MESSAGE_LENGTH} karakter`),
+    .min(5, "Lời nhắn tối thiểu 5 ký tự")
+    .max(MAX_MESSAGE_LENGTH, `Lời nhắn tối đa ${MAX_MESSAGE_LENGTH} ký tự`),
 });
 
 export type RsvpFormValues = z.infer<typeof rsvpSchema>;

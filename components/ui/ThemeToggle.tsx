@@ -41,7 +41,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
         className
       )}
-      aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+      aria-label={isDark ? "Bật chế độ sáng" : "Bật chế độ tối"}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

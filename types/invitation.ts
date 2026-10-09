@@ -3,6 +3,8 @@ export interface CoupleInfo {
   bride: string;
   groomFull: string;
   brideFull: string;
+  groomTitle: string;
+  brideTitle: string;
   groomParents: string;
   brideParents: string;
 }
@@ -24,7 +26,8 @@ export interface EventDetail {
   mapsLabel: string;
 }
 
-export interface GiftInfo {
+export interface GiftAccount {
+  label: string;
   bankName: string;
   accountHolder: string;
   accountNumber: string;
@@ -32,6 +35,7 @@ export interface GiftInfo {
 
 export interface StoryItem {
   year: string;
+  month: string;
   title: string;
   description: string;
 }
@@ -46,7 +50,7 @@ export interface GalleryImage {
 export interface InvitationData {
   couple: CoupleInfo;
   event: EventInfo;
-  gift: GiftInfo;
+  gift: GiftAccount[];
   story: StoryItem[];
   gallery: GalleryImage[];
   hashtag: string;

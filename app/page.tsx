@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, use } from "react";
 import dynamic from "next/dynamic";
 import { OpeningScreen } from "@/components/sections/OpeningScreen";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -14,13 +14,14 @@ import { FloatingNavigation } from "@/components/FloatingNavigation";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LoadingState } from "@/components/ui/LoadingState";
+import { APPS_SCRIPT_ENABLED, MAX_MESSAGE_LENGTH } from "@/lib/constants";
 
 const GallerySection = dynamic(
   () =>
     import("@/components/sections/GallerySection").then(
       (m) => m.GallerySection
     ),
-  { loading: () => <LoadingState message="Memuat galeri..." className="py-24" /> }
+  { loading: () => <LoadingState message="Đang tải thư viện ảnh..." className="py-24" /> }
 );
 
 const GuestbookSection = dynamic(
@@ -28,21 +29,34 @@ const GuestbookSection = dynamic(
     import("@/components/sections/GuestbookSection").then(
       (m) => m.GuestbookSection
     ),
-  { loading: () => <LoadingState message="Memuat buku tamu..." className="py-24" /> }
+  { loading: () => <LoadingState message="Đang tải sổ lưu bút..." className="py-24" /> }
 );
 
-function useGuestNameFromUrl(): string {
-  if (typeof window === "undefined") return "Tamu Undangan";
-  const params = new URLSearchParams(window.location.search);
-  const raw = params.get("to") ?? params.get("name") ?? "";
-  if (!raw) return "Tamu Undangan";
-  const decoded = decodeURIComponent(raw).trim().slice(0, 80);
-  return decoded || "Tamu Undangan";
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function readGuestName(params: SearchParams): string {
+  const raw = params.to ?? params.name;
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (!value) return "Khách mời";
+
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    decoded = value;
+  }
+
+  return decoded.trim().slice(0, 80) || "Khách mời";
 }
 
-export default function WeddingPage() {
+export default function WeddingPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   const [opened, setOpened] = useState(false);
-  const guestName = useGuestNameFromUrl();
+  const guestName = readGuestName(use(searchParams));
+  const isDisabledAppScript = !APPS_SCRIPT_ENABLED;
 
   return (
     <>
@@ -65,23 +79,29 @@ export default function WeddingPage() {
             <EventDetailsSection />
             <Suspense
               fallback={
-                <LoadingState message="Memuat galeri..." className="py-24" />
+                <LoadingState message="Đang tải thư viện ảnh..." className="py-24" />
               }
             >
               <GallerySection />
             </Suspense>
             <StorySection />
-            <RsvpSection />
-            <Suspense
-              fallback={
-                <LoadingState
-                  message="Memuat buku tamu..."
-                  className="py-24"
-                />
-              }
-            >
-              <GuestbookSection />
-            </Suspense>
+
+            {!isDisabledAppScript && (
+              <>
+                <RsvpSection />
+                <Suspense
+                  fallback={
+                    <LoadingState
+                      message="Đang tải sổ lưu bút..."
+                      className="py-24"
+                    />
+                  }
+                >
+                  <GuestbookSection />
+                </Suspense>
+              </>
+            )}
+            
             <GiftSection />
             <FooterSection />
           </main>

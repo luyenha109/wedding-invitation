@@ -112,6 +112,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    /* padding mở rộng vùng vẽ nền để dấu tiếng Việt không bị cắt */
+    padding: 0.18em 0.08em;
   }
 
   .gold-shimmer-text {
@@ -128,6 +130,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 3s linear infinite;
+    /* padding mở rộng vùng vẽ nền để dấu tiếng Việt không bị cắt */
+    padding: 0.18em 0.08em;
   }
 
   .card-glass {

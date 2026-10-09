@@ -7,75 +7,75 @@ import { Reveal } from "@/components/motion/Reveal";
 import { invitationData } from "@/data/invitation";
 import { copyToClipboard } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import type { GiftAccount } from "@/types/invitation";
 
-function AccountCard() {
-  const { gift } = invitationData;
-  const [copied, setCopied] = useState<"number" | null>(null);
+function AccountCard({ account }: { account: GiftAccount }) {
+  const [copied, setCopied] = useState(false);
 
-  async function handleCopy(text: string, type: "number") {
+  async function handleCopy(text: string) {
     try {
       await copyToClipboard(text);
-      setCopied(type);
-      setTimeout(() => setCopied(null), 2200);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
     } catch {
-      // Clipboard API tidak tersedia di beberapa browser lama
+      // Clipboard API might not be supported, fallback to prompt
     }
   }
 
   return (
-    <div className="card-glass rounded-3xl border border-[#D4AF37]/15 overflow-hidden shadow-[0_4px_32px_rgba(212,175,55,0.08)]">
-      <div className="bg-gradient-to-br from-[#D4AF37]/10 to-transparent p-6 pb-4 border-b border-[#D4AF37]/10">
+    <div className="card-glass h-full rounded-3xl border border-[#D4AF37]/15 overflow-hidden shadow-[0_4px_32px_rgba(212,175,55,0.08)]">
+      <div className="bg-gradient-to-br from-[#D4AF37]/10 to-transparent p-5 pb-4 border-b border-[#D4AF37]/10">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#D4AF37]/15">
-            <Gift className="h-5 w-5 text-[#D4AF37]" aria-hidden />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+            <Gift className="h-4 w-4 text-[#D4AF37]" aria-hidden />
           </div>
           <div>
-            <p className="font-sans text-xs uppercase tracking-widest text-[color:var(--text-muted)]">
-              Transfer ke
+            <p className="font-sans text-[0.65rem] uppercase tracking-widest text-[color:var(--text-muted)]">
+              {account.label}
             </p>
-            <p className="font-serif text-base font-semibold text-[color:var(--text-primary)]">
-              Bank {gift.bankName}
+            <p className="font-serif text-sm font-semibold text-[color:var(--text-primary)]">
+              Ngân Hàng {account.bankName}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="p-6 flex flex-col gap-5">
+      <div className="p-5 flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="font-sans text-xs text-[color:var(--text-muted)]">
-            Atas Nama
+          <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
+            Chủ tài khoản
           </p>
-          <p className="font-serif text-lg font-semibold text-[color:var(--text-primary)]">
-            {gift.accountHolder}
+          <p className="font-serif text-sm font-semibold text-[color:var(--text-primary)]">
+            {account.accountHolder}
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="font-sans text-xs text-[color:var(--text-muted)]">
-            Nomor Rekening
+          <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
+            Số tài khoản
           </p>
           <div className="flex items-center gap-3">
-            <p className="font-mono text-xl font-bold tracking-widest text-[#D4AF37]">
-              {gift.accountNumber}
+            <p className="font-mono text-base font-bold tracking-widest text-[#D4AF37]">
+              {account.accountNumber}
             </p>
             <motion.button
-              onClick={() => handleCopy(gift.accountNumber, "number")}
+              onClick={() => handleCopy(account.accountNumber)}
               className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all duration-300",
+                "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
-                copied === "number"
+                copied
                   ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
                   : "border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/60"
               )}
               whileTap={{ scale: 0.9 }}
               aria-label={
-                copied === "number"
-                  ? "Nomor rekening tersalin"
-                  : "Salin nomor rekening"
+                copied
+                  ? `Đã sao chép số tài khoản ${account.label}`
+                  : `Sao chép số tài khoản ${account.label}`
               }
             >
               <AnimatePresence mode="wait" initial={false}>
-                {copied === "number" ? (
+                {copied ? (
                   <motion.span
                     key="check"
                     initial={{ scale: 0, rotate: -45 }}
@@ -83,7 +83,7 @@ function AccountCard() {
                     exit={{ scale: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Check className="h-4 w-4" />
+                    <Check className="h-3.5 w-3.5" />
                   </motion.span>
                 ) : (
                   <motion.span
@@ -93,23 +93,23 @@ function AccountCard() {
                     exit={{ scale: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-3.5 w-3.5" />
                   </motion.span>
                 )}
               </AnimatePresence>
             </motion.button>
           </div>
           <AnimatePresence>
-            {copied === "number" && (
+            {copied && (
               <motion.p
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="text-xs text-emerald-400"
+                className="text-[0.65rem] text-emerald-400"
                 role="status"
                 aria-live="polite"
               >
-                Nomor rekening tersalin ke clipboard
+                Đã sao chép số tài khoản {account.label} vào clipboard
               </motion.p>
             )}
           </AnimatePresence>
@@ -124,34 +124,38 @@ export function GiftSection() {
     <section
       id="gift"
       className="py-24 section-padding overflow-hidden"
-      aria-label="Informasi hadiah dan rekening"
+      aria-label="Thông tin quà tặng và tài khoản"
     >
-      <div className="mx-auto max-w-md">
+      <div className="mx-auto max-w-2xl">
         <Reveal direction="up">
           <div className="mb-12 flex flex-col items-center gap-3 text-center">
             <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
               Wedding Gift
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
-              Hadiah
+              Quà Tặng
             </h2>
             <div className="gold-divider w-24" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-sm text-balance leading-relaxed">
-              Kehadiran dan doa Anda adalah hadiah terindah bagi kami. Namun
-              jika Anda ingin memberikan tanda kasih, kami menerima dengan penuh
-              rasa syukur.
+              Sự hiện diện và những lời chúc của bạn là món quà tuyệt vời nhất đối
+              với chúng tôi. Nhưng nếu bạn muốn gửi tặng một chút tấm lòng,
+              chúng tôi xin trân trọng đón nhận với lòng biết ơn.
             </p>
           </div>
         </Reveal>
 
-        <Reveal delay={0.15} direction="up">
-          <AccountCard />
-        </Reveal>
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+          {invitationData.gift.map((account, index) => (
+            <Reveal key={account.label} delay={0.15 + index * 0.1} direction="up">
+              <AccountCard account={account} />
+            </Reveal>
+          ))}
+        </div>
 
         <Reveal delay={0.25} direction="up">
           <p className="mt-6 text-center font-sans text-xs text-[color:var(--text-muted)] leading-relaxed">
-            Konfirmasi transfer dapat dikirimkan melalui WhatsApp kepada
-            keluarga pengantin. Terima kasih atas kebaikan hati Anda.
+            Bạn có thể xác nhận chuyển khoản qua Facebook hoặc Zalo cho gia đình cô dâu
+            chú rể. Cảm ơn tấm lòng tốt của bạn.
           </p>
         </Reveal>
       </div>

@@ -77,7 +77,7 @@ export function Toast({ toast, onDismiss, duration = 4500 }: ToastProps) {
           "mt-0.5 rounded-md p-0.5 transition-opacity hover:opacity-70",
           config.text
         )}
-        aria-label="Tutup notifikasi"
+        aria-label="Đóng thông báo"
       >
         <X className="h-3.5 w-3.5" />
       </button>
@@ -94,7 +94,7 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   return (
     <div
       className="fixed bottom-6 right-4 z-50 flex flex-col gap-2 items-end"
-      aria-label="Notifikasi"
+      aria-label="Thông báo"
     >
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (

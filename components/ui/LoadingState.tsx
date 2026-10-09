@@ -13,7 +13,7 @@ const spinnerSize = {
 };
 
 export function LoadingState({
-  message = "Memuat...",
+  message = "Đang tải...",
   className,
   size = "md",
 }: LoadingStateProps) {

@@ -7,12 +7,17 @@ export function cn(...inputs: ClassValue[]): string {
 
 export function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString("id-ID", {
+  return date.toLocaleDateString("vi-VN", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+}
+
+/** Ghép ngày (yyyy-mm-dd) và giờ (HH:mm) thành ISO string theo giờ Việt Nam (+07:00). */
+export function getEventDateTime(dateStr: string, time: string): string {
+  return `${dateStr}T${time}:00+07:00`;
 }
 
 export function formatTime(seconds: number): {
@@ -47,7 +52,7 @@ export function copyToClipboard(text: string): Promise<void> {
   if (typeof navigator !== "undefined" && navigator.clipboard) {
     return navigator.clipboard.writeText(text);
   }
-  return Promise.reject(new Error("Clipboard API tidak tersedia"));
+  return Promise.reject(new Error("Clipboard API không khả dụng"));
 }
 
 export function truncate(str: string, maxLength: number): string {
@@ -57,7 +62,7 @@ export function truncate(str: string, maxLength: number): string {
 
 export function getGuestName(searchParams: URLSearchParams): string {
   const name = searchParams.get("to") ?? searchParams.get("name");
-  if (!name) return "Tamu Undangan";
+  if (!name) return "Khách mời";
   const decoded = decodeURIComponent(name);
   return decoded.slice(0, 80);
 }

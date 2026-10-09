@@ -47,7 +47,7 @@ function Lightbox({ image, onClose }: LightboxProps) {
         <button
           onClick={onClose}
           className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          aria-label="Tutup lightbox"
+          aria-label="Đóng lightbox"
         >
           <X className="h-4 w-4" />
         </button>
@@ -64,7 +64,7 @@ export function GallerySection() {
     <section
       id="gallery"
       className="py-24 section-padding overflow-hidden"
-      aria-label="Galeri foto"
+      aria-label="Thư viện ảnh"
     >
       <div className="mx-auto max-w-6xl">
         <Reveal direction="up">
@@ -73,7 +73,7 @@ export function GallerySection() {
               Pre-Wedding
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
-              Galeri Foto
+              Thư Viện Ảnh
             </h2>
             <div className="gold-divider w-24" aria-hidden />
           </div>
@@ -87,7 +87,7 @@ export function GallerySection() {
                 onClick={() => setSelected(image)}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
-                aria-label={`Lihat ${image.alt}`}
+                aria-label={`Xem ${image.alt}`}
               >
                 <div className="relative overflow-hidden break-inside-avoid">
                   <Image

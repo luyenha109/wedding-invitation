@@ -20,21 +20,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pernikahan Arga & Nimas — 20 Desember 2026",
+  title: "Đám cưới Luyến Hà & Thơ Nguyễn — 28 tháng 11 năm 2026",
   description:
-    "Dengan penuh kebahagiaan, kami mengundang Anda untuk menyaksikan dan memberikan doa restu atas pernikahan Arga Pradipta & Nimas Dyah Ayu Lestari pada Sabtu, 20 Desember 2026 di Grand Ballroom Nusantara, Yogyakarta.",
+    "Với niềm hạnh phúc trọn vẹn, chúng tôi trân trọng mời bạn đến chứng kiến và gửi lời chúc phúc cho đám cưới của Luyến Hà & Thơ Nguyễn vào Thứ Bảy, ngày 28 tháng 11 năm 2026 tại Cát Tiên 3, Lâm Đồng.",
   keywords: [
-    "pernikahan",
+    "đám cưới",
     "wedding",
-    "Arga Pradipta",
-    "Nimas Dyah Ayu Lestari",
-    "undangan digital",
-    "Yogyakarta",
+    "Luyến Hà",
+    "Thơ Nguyễn",
+    "thiệp cưới điện tử",
+    "Lâm Đồng",
     "2026",
-    "#ArgaNimas2026",
+    "#LuyenTho2026",
   ],
-  authors: [{ name: "Arga & Nimas" }],
-  creator: "Arga & Nimas",
+  authors: [{ name: "Luyến Hà & Thơ Nguyễn" }],
+  creator: "Luyến Hà & Thơ Nguyễn",
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: SITE_URL,
@@ -53,25 +53,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    title: "Pernikahan Arga & Nimas — 20 Desember 2026",
+    title: "Đám cưới Luyến Hà & Thơ Nguyễn — 28 tháng 11 năm 2026",
     description:
-      "Kami mengundang Anda untuk menyaksikan dan memberikan doa restu atas pernikahan kami. Sabtu, 20 Desember 2026, Grand Ballroom Nusantara, Yogyakarta.",
-    siteName: "Undangan Pernikahan Arga & Nimas",
-    locale: "id_ID",
+      "Chúng tôi mời bạn đến chứng kiến và gửi lời chúc phúc cho đám cưới của chúng tôi. Thứ Bảy, ngày 28 tháng 11 năm 2026, Cát Tiên 3, Lâm Đồng.",
+    siteName: "Thiệp cưới Luyến Hà & Thơ Nguyễn",
+    locale: "vi_VN",
     images: [
       {
         url: `${SITE_URL}/images/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Pernikahan Arga Pradipta & Nimas Dyah Ayu Lestari",
+        alt: "Đám cưới Luyến Hà & Thơ Nguyễn",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pernikahan Arga & Nimas — 20 Desember 2026",
+    title: "Đám cưới Luyến Hà & Thơ Nguyễn — 28 tháng 11 năm 2026",
     description:
-      "Kami mengundang Anda untuk menyaksikan momen bahagia kami. Sabtu, 20 Desember 2026, Yogyakarta.",
+      "Chúng tôi mời bạn đến chứng kiến khoảnh khắc hạnh phúc của chúng tôi. Thứ Bảy, ngày 28 tháng 11 năm 2026, Cát Tiên 3, Lâm Đồng.",
     images: [`${SITE_URL}/images/og-image.png`],
   },
 };
@@ -93,7 +93,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="id"
+      lang="vi"
       className={`${playfair.variable} ${inter.variable}`}
       suppressHydrationWarning
     >

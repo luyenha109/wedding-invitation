@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, Users } from "lucide-react";
+import { CheckCircle, Info, Users } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
@@ -10,7 +10,11 @@ import { Reveal } from "@/components/motion/Reveal";
 import { AnimatedGradient } from "@/components/motion/AnimatedGradient";
 import { useRsvp } from "@/hooks/useRsvp";
 import { rsvpSchema } from "@/lib/validators";
-import { ATTENDANCE_OPTIONS, MAX_MESSAGE_LENGTH } from "@/lib/constants";
+import {
+  APPS_SCRIPT_ENABLED,
+  ATTENDANCE_OPTIONS,
+  MAX_MESSAGE_LENGTH,
+} from "@/lib/constants";
 import type { AttendanceStatus } from "@/types/invitation";
 import { cn } from "@/lib/utils";
 
@@ -57,12 +61,13 @@ export function RsvpSection() {
   }
 
   const isLoading = state.status === "loading";
+  const isDisabled = !APPS_SCRIPT_ENABLED;
 
   return (
     <section
       id="rsvp"
       className="relative py-24 section-padding overflow-hidden"
-      aria-label="Konfirmasi kehadiran"
+      aria-label="Xác nhận tham dự"
     >
       <AnimatedGradient className="z-0 opacity-50" />
 
@@ -70,21 +75,36 @@ export function RsvpSection() {
         <Reveal direction="up">
           <div className="mb-12 flex flex-col items-center gap-3 text-center">
             <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-              Konfirmasi
+              Xác Nhận
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
               RSVP
             </h2>
             <div className="gold-divider w-24" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-sm text-balance">
-              Mohon konfirmasi kehadiran Anda paling lambat{" "}
-              <strong className="text-[#D4AF37]">10 Desember 2026</strong>.
+              Vui lòng xác nhận tham dự của bạn trễ nhất{" "}
+              <strong className="text-[#D4AF37]">10 tháng 11 năm 2026</strong>.
             </p>
           </div>
         </Reveal>
 
         <Reveal delay={0.1} direction="up">
           <div className="card-glass rounded-3xl p-8 border border-[#D4AF37]/15 shadow-[0_4px_32px_rgba(212,175,55,0.08)]">
+            {isDisabled ? (
+              <div className="flex flex-col items-center gap-4 py-10 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#D4AF37]/15">
+                  <Info className="h-6 w-6 text-[#D4AF37]" aria-hidden />
+                </div>
+                <p className="font-serif text-lg font-semibold text-[color:var(--text-primary)]">
+                  Tính năng RSVP chưa khả dụng
+                </p>
+                <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-sm text-balance">
+                  Tính năng xác nhận tham dự trực tuyến hiện không khả dụng. Vui
+                  lòng liên hệ trực tiếp với chúng tôi để xác nhận tham dự của
+                  bạn.
+                </p>
+              </div>
+            ) : (
             <AnimatePresence mode="wait">
               {state.status === "success" ? (
                 <motion.div
@@ -110,15 +130,15 @@ export function RsvpSection() {
                   </motion.div>
                   <div className="flex flex-col gap-1.5">
                     <h3 className="font-serif text-xl font-semibold text-[color:var(--text-primary)]">
-                      Terima Kasih!
+                      Cảm Ơn!
                     </h3>
                     <p className="font-sans text-sm text-[color:var(--text-secondary)]">
-                      Konfirmasi kehadiran Anda telah kami terima. Kami sangat
-                      menantikan kehadiran Anda.
+                      Chúng tôi đã nhận được xác nhận tham dự của bạn. Rất mong
+                      được gặp bạn.
                     </p>
                   </div>
                   <Button variant="outline" size="sm" onClick={handleReset}>
-                    Kirim Ulang
+                    Gửi Lại
                   </Button>
                 </motion.div>
               ) : (
@@ -132,9 +152,9 @@ export function RsvpSection() {
                   noValidate
                 >
                   <Input
-                    label="Nama Lengkap"
+                    label="Họ và Tên"
                     type="text"
-                    placeholder="Masukkan nama Anda"
+                    placeholder="Nhập tên của bạn"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     error={errors.name}
@@ -145,8 +165,8 @@ export function RsvpSection() {
 
                   <fieldset>
                     <legend className="mb-2 text-sm font-medium text-[color:var(--text-secondary)]">
-                      Konfirmasi Kehadiran{" "}
-                      <span className="text-[#D4AF37]" aria-label="wajib diisi">
+                      Xác Nhận Tham Dự{" "}
+                      <span className="text-[#D4AF37]" aria-label="bắt buộc">
                         *
                       </span>
                     </legend>
@@ -203,7 +223,7 @@ export function RsvpSection() {
                         className="text-sm font-medium text-[color:var(--text-secondary)]"
                       >
                         <Users className="inline h-3.5 w-3.5 mr-1 text-[#D4AF37]" aria-hidden />
-                        Jumlah Tamu
+                        Số Lượng Khách
                       </label>
                       <div className="flex items-center gap-3">
                         <button
@@ -212,7 +232,7 @@ export function RsvpSection() {
                             setGuestCount((v) => Math.max(1, v - 1))
                           }
                           className="flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--border-color)] text-[color:var(--text-primary)] hover:border-[#D4AF37]/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-                          aria-label="Kurangi jumlah tamu"
+                          aria-label="Giảm số lượng khách"
                         >
                           −
                         </button>
@@ -225,12 +245,12 @@ export function RsvpSection() {
                             setGuestCount((v) => Math.min(5, v + 1))
                           }
                           className="flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--border-color)] text-[color:var(--text-primary)] hover:border-[#D4AF37]/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-                          aria-label="Tambah jumlah tamu"
+                          aria-label="Tăng số lượng khách"
                         >
                           +
                         </button>
                         <span className="text-xs text-[color:var(--text-muted)]">
-                          (maks. 5 orang)
+                          (tối đa 5 người)
                         </span>
                       </div>
                       {errors.guestCount && (
@@ -242,8 +262,8 @@ export function RsvpSection() {
                   )}
 
                   <Textarea
-                    label="Pesan atau Doa (opsional)"
-                    placeholder="Tuliskan pesan atau doa Anda untuk kedua mempelai..."
+                    label="Lời Nhắn hoặc Doa (không bắt buộc)"
+                    placeholder="Viết lời nhắn hoặc lời cầu nguyện của bạn cho cô dâu chú rể..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     error={errors.message}
@@ -266,11 +286,12 @@ export function RsvpSection() {
                     loading={isLoading}
                     className="w-full mt-1"
                   >
-                    Kirim Konfirmasi
+                    Gửi Xác Nhận
                   </Button>
                 </motion.form>
               )}
             </AnimatePresence>
+            )}
           </div>
         </Reveal>
       </div>

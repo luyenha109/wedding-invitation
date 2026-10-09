@@ -61,7 +61,7 @@ function successResponse(message, data) {
 function errorResponse(message, errorCode) {
   return jsonResponse({
     success: false,
-    message: message || "Terjadi kesalahan",
+    message: message || "Đã xảy ra lỗi",
     error: errorCode || "UNKNOWN_ERROR"
   });
 }
@@ -70,15 +70,15 @@ function doGet(e) {
   try {
     var action = e.parameter && e.parameter.action;
     if (!action || !VALID_ACTIONS.includes(action)) {
-      return errorResponse("Action tidak valid", "INVALID_ACTION");
+      return errorResponse("Hành động không hợp lệ", "INVALID_ACTION");
     }
     if (action === "get_guestbook") {
       return handleGetGuestbook();
     }
-    return errorResponse("Method tidak didukung untuk action ini", "METHOD_NOT_ALLOWED");
+    return errorResponse("Phương thức không được hỗ trợ cho hành động này", "METHOD_NOT_ALLOWED");
   } catch (err) {
     Logger.log("doGet error: " + err.toString());
-    return errorResponse("Terjadi kesalahan server", "SERVER_ERROR");
+    return errorResponse("Đã xảy ra lỗi máy chủ", "SERVER_ERROR");
   }
 }
 
@@ -88,12 +88,12 @@ function doPost(e) {
     try {
       body = JSON.parse(e.postData.contents);
     } catch (_) {
-      return errorResponse("Request body tidak valid", "INVALID_JSON");
+      return errorResponse("Nội dung yêu cầu không hợp lệ", "INVALID_JSON");
     }
 
     var action = body.action;
     if (!action || !VALID_ACTIONS.includes(action)) {
-      return errorResponse("Action tidak valid", "INVALID_ACTION");
+      return errorResponse("Hành động không hợp lệ", "INVALID_ACTION");
     }
 
     if (action === "rsvp") {
@@ -103,10 +103,10 @@ function doPost(e) {
       return handleGuestbook(body);
     }
 
-    return errorResponse("Action tidak dikenali", "UNKNOWN_ACTION");
+    return errorResponse("Không nhận diện được hành động", "UNKNOWN_ACTION");
   } catch (err) {
     Logger.log("doPost error: " + err.toString());
-    return errorResponse("Terjadi kesalahan server", "SERVER_ERROR");
+    return errorResponse("Đã xảy ra lỗi máy chủ", "SERVER_ERROR");
   }
 }
 
@@ -118,7 +118,7 @@ function handleGetGuestbook() {
 
   var lastRow = sheet.getLastRow();
   if (lastRow < 2) {
-    return successResponse("Berhasil", { entries: [], total: 0 });
+    return successResponse("Thành công", { entries: [], total: 0 });
   }
 
   var rows = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
@@ -135,7 +135,7 @@ function handleGetGuestbook() {
     if (entries.length >= 50) break;
   }
 
-  return successResponse("Berhasil", { entries: entries, total: entries.length });
+  return successResponse("Thành công", { entries: entries, total: entries.length });
 }
 
 function handleRsvp(body) {
@@ -146,14 +146,14 @@ function handleRsvp(body) {
   var userAgent = sanitizeString(body.userAgent || "", 200);
 
   if (!name || name.length < 2) {
-    return errorResponse("Nama tidak valid", "INVALID_NAME");
+    return errorResponse("Tên không hợp lệ", "INVALID_NAME");
   }
   if (!VALID_ATTENDANCE.includes(attendance)) {
-    return errorResponse("Status kehadiran tidak valid", "INVALID_ATTENDANCE");
+    return errorResponse("Trạng thái tham dự không hợp lệ", "INVALID_ATTENDANCE");
   }
   if (isNaN(guestCount) || guestCount < MIN_GUEST_COUNT || guestCount > MAX_GUEST_COUNT) {
     return errorResponse(
-      "Jumlah tamu harus antara " + MIN_GUEST_COUNT + " dan " + MAX_GUEST_COUNT,
+      "Số lượng khách phải từ " + MIN_GUEST_COUNT + " đến " + MAX_GUEST_COUNT,
       "INVALID_GUEST_COUNT"
     );
   }
@@ -162,7 +162,7 @@ function handleRsvp(body) {
   try {
     lock.waitLock(8000);
   } catch (_) {
-    return errorResponse("Server sibuk, coba lagi sebentar", "LOCK_TIMEOUT");
+    return errorResponse("Máy chủ đang bận, vui lòng thử lại sau", "LOCK_TIMEOUT");
   }
 
   try {
@@ -180,7 +180,7 @@ function handleRsvp(body) {
       userAgent
     ]);
 
-    return successResponse("RSVP berhasil dikirim. Terima kasih!");
+    return successResponse("Đã gửi RSVP thành công. Cảm ơn bạn!");
   } finally {
     lock.releaseLock();
   }
@@ -192,17 +192,17 @@ function handleGuestbook(body) {
   var userAgent = sanitizeString(body.userAgent || "", 200);
 
   if (!name || name.length < 2) {
-    return errorResponse("Nama tidak valid", "INVALID_NAME");
+    return errorResponse("Tên không hợp lệ", "INVALID_NAME");
   }
   if (!message || message.length < 5) {
-    return errorResponse("Pesan terlalu pendek (minimal 5 karakter)", "MESSAGE_TOO_SHORT");
+    return errorResponse("Lời nhắn quá ngắn (tối thiểu 5 ký tự)", "MESSAGE_TOO_SHORT");
   }
 
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(8000);
   } catch (_) {
-    return errorResponse("Server sibuk, coba lagi sebentar", "LOCK_TIMEOUT");
+    return errorResponse("Máy chủ đang bận, vui lòng thử lại sau", "LOCK_TIMEOUT");
   }
 
   try {
@@ -222,7 +222,7 @@ function handleGuestbook(body) {
           var rowTime = new Date(recentRows[i][0]).getTime();
           if (Date.now() - rowTime < 30000) {
             return errorResponse(
-              "Mohon tunggu 30 detik sebelum mengirim ucapan lagi",
+              "Vui lòng đợi 30 giây trước khi gửi lời chúc tiếp theo",
               "RATE_LIMITED"
             );
           }
@@ -231,7 +231,7 @@ function handleGuestbook(body) {
     }
 
     sheet.appendRow([new Date(), name, message, userAgent]);
-    return successResponse("Ucapan berhasil dikirim. Terima kasih!");
+    return successResponse("Đã gửi lời chúc thành công. Cảm ơn bạn!");
   } finally {
     lock.releaseLock();
   }

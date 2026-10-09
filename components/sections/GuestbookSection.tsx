@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Send } from "lucide-react";
+import { Heart, Info, Send } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
@@ -11,7 +11,7 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { useGuestbook } from "@/hooks/useGuestbook";
 import { guestbookSchema } from "@/lib/validators";
-import { MAX_MESSAGE_LENGTH } from "@/lib/constants";
+import { APPS_SCRIPT_ENABLED, MAX_MESSAGE_LENGTH } from "@/lib/constants";
 import type { GuestbookEntry } from "@/types/invitation";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ interface EntryCardProps {
 }
 
 function EntryCard({ entry, index }: EntryCardProps) {
-  const formattedDate = new Date(entry.timestamp).toLocaleDateString("id-ID", {
+  const formattedDate = new Date(entry.timestamp).toLocaleDateString("vi-VN", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -84,10 +84,12 @@ export function GuestbookSection() {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const isDisabled = !APPS_SCRIPT_ENABLED;
 
   useEffect(() => {
+    if (isDisabled) return;
     load();
-  }, [load]);
+  }, [load, isDisabled]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -122,26 +124,39 @@ export function GuestbookSection() {
     <section
       id="guestbook"
       className="py-24 section-padding overflow-hidden"
-      aria-label="Buku tamu dan ucapan"
+      aria-label="Sổ lưu bút và lời chúc"
     >
       <div className="mx-auto max-w-2xl">
         <Reveal direction="up">
           <div className="mb-12 flex flex-col items-center gap-3 text-center">
             <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-              Doa &amp; Ucapan
+              Lời Chúc &amp;
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
-              Buku Tamu
+              Sổ Lưu Bút
             </h2>
             <div className="gold-divider w-24" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-secondary)]">
-              Tinggalkan ucapan dan doa untuk kedua mempelai.
+              Hãy để lại lời chúc mừng hạnh phúc cho cô dâu chú rể.
             </p>
           </div>
         </Reveal>
 
         <Reveal delay={0.1} direction="up">
           <div className="card-glass rounded-3xl p-7 border border-[#D4AF37]/15 shadow-[0_4px_32px_rgba(212,175,55,0.07)] mb-8">
+            {isDisabled ? (
+              <div className="flex flex-col items-center gap-4 py-8 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#D4AF37]/15">
+                  <Info className="h-6 w-6 text-[#D4AF37]" aria-hidden />
+                </div>
+                <p className="font-serif text-lg font-semibold text-[color:var(--text-primary)]">
+                  Tính năng Sổ Lưu Bút chưa khả dụng
+                </p>
+                <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-sm text-balance">
+                  Tính năng gửi lời chúc trực tuyến hiện không khả dụng.
+                </p>
+              </div>
+            ) : (
             <AnimatePresence mode="wait">
               {submitted ? (
                 <motion.div
@@ -166,10 +181,10 @@ export function GuestbookSection() {
                     <Heart className="h-6 w-6 text-[#D4AF37]" />
                   </motion.div>
                   <p className="font-serif text-lg font-semibold text-[color:var(--text-primary)]">
-                    Ucapan Terkirim!
+                    Đã Gửi Lời Chúc!
                   </p>
                   <p className="font-sans text-sm text-[color:var(--text-secondary)]">
-                    Terima kasih atas doa dan ucapan Anda yang indah.
+                    Cảm ơn những lời chúc và lời cầu nguyện tốt đẹp của bạn.
                   </p>
                 </motion.div>
               ) : (
@@ -183,9 +198,9 @@ export function GuestbookSection() {
                   noValidate
                 >
                   <Input
-                    label="Nama"
+                    label="Tên"
                     type="text"
-                    placeholder="Nama Anda"
+                    placeholder="Tên của bạn"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     error={errors.name}
@@ -195,8 +210,8 @@ export function GuestbookSection() {
                   />
 
                   <Textarea
-                    label="Pesan & Doa"
-                    placeholder="Tuliskan ucapan tulus Anda untuk Arga & Nimas..."
+                    label="Lời Nhắn & Doa"
+                    placeholder="Viết lời chúc chân thành của bạn dành cho Luyến Hà & Thơ Nguyễn..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     error={errors.message}
@@ -224,22 +239,24 @@ export function GuestbookSection() {
                     className="w-full gap-2"
                   >
                     <Send className="h-4 w-4" aria-hidden />
-                    Kirim Ucapan
+                    Gửi Lời Chúc
                   </Button>
                 </motion.form>
               )}
             </AnimatePresence>
+            )}
           </div>
         </Reveal>
 
-        <div aria-label="Daftar ucapan tamu" aria-live="polite">
+        {!isDisabled && (
+        <div aria-label="Danh sách lời chúc của khách" aria-live="polite">
           {fetchState.status === "loading" && (
-            <LoadingState message="Memuat ucapan..." />
+            <LoadingState message="Đang tải lời chúc..." />
           )}
 
           {fetchState.status === "error" && (
             <ErrorState
-              message="Gagal memuat ucapan. Silakan refresh halaman."
+              message="Không thể tải lời chúc. Vui lòng tải lại trang."
               onRetry={load}
             />
           )}
@@ -249,7 +266,7 @@ export function GuestbookSection() {
             <div className="flex flex-col gap-4">
               {entries.length === 0 && fetchState.status === "success" ? (
                 <p className="py-8 text-center font-sans text-sm text-[color:var(--text-muted)]">
-                  Belum ada ucapan. Jadilah yang pertama!
+                  Chưa có lời chúc nào. Hãy là người đầu tiên!
                 </p>
               ) : (
                 entries.map((entry, i) => (
@@ -259,6 +276,7 @@ export function GuestbookSection() {
             </div>
           )}
         </div>
+        )}
       </div>
     </section>
   );

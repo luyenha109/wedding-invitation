@@ -12,7 +12,7 @@ import { sanitizeName, sanitizeMessage } from "@/lib/sanitize";
 function getEndpoint(): string {
   if (!APPS_SCRIPT_URL) {
     throw new Error(
-      "NEXT_PUBLIC_APPS_SCRIPT_URL belum dikonfigurasi. Periksa .env.local Anda."
+      "NEXT_PUBLIC_APPS_SCRIPT_URL chưa được cấu hình. Kiểm tra .env.local của bạn."
     );
   }
   return APPS_SCRIPT_URL;
@@ -31,7 +31,7 @@ async function postToScript<T>(
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: Gagal menghubungi server`);
+    throw new Error(`HTTP ${response.status}: Không thể kết nối máy chủ`);
   }
 
   const data: T = await response.json();
@@ -49,7 +49,7 @@ async function getFromScript<T>(params: Record<string, string>): Promise<T> {
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: Gagal memuat data`);
+    throw new Error(`HTTP ${response.status}: Không thể tải dữ liệu`);
   }
 
   const data: T = await response.json();

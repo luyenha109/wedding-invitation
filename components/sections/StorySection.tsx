@@ -21,7 +21,7 @@ function StoryCard({ item, index, isLeft }: StoryCardProps) {
           >
             <article className="card-glass max-w-xs rounded-2xl p-6 text-right border border-[#D4AF37]/15 shadow-[0_2px_16px_rgba(212,175,55,0.07)]">
               <span className="font-sans text-xs uppercase tracking-widest text-[#D4AF37]">
-                {item.year}
+                Tháng {item.month} · {item.year}
               </span>
               <h3 className="mt-1 font-serif text-lg font-semibold text-[color:var(--text-primary)]">
                 {item.title}
@@ -45,7 +45,7 @@ function StoryCard({ item, index, isLeft }: StoryCardProps) {
             <Reveal delay={index * 0.12} direction="left">
               <article className="card-glass rounded-2xl p-5 border border-[#D4AF37]/15">
                 <span className="font-sans text-xs uppercase tracking-widest text-[#D4AF37]">
-                  {item.year}
+                  Tháng {item.month} · {item.year}
                 </span>
                 <h3 className="mt-1 font-serif text-base font-semibold text-[color:var(--text-primary)]">
                   {item.title}
@@ -79,7 +79,7 @@ function StoryCard({ item, index, isLeft }: StoryCardProps) {
           >
             <article className="card-glass rounded-2xl p-6 border border-[#D4AF37]/15 shadow-[0_2px_16px_rgba(212,175,55,0.07)]">
               <span className="font-sans text-xs uppercase tracking-widest text-[#D4AF37]">
-                {item.year}
+                Tháng {item.month} · {item.year}
               </span>
               <h3 className="mt-1 font-serif text-lg font-semibold text-[color:var(--text-primary)]">
                 {item.title}
@@ -102,7 +102,7 @@ export function StorySection() {
     <section
       id="story"
       className="relative py-24 section-padding overflow-hidden"
-      aria-label="Cerita perjalanan kami"
+      aria-label="Câu chuyện tình yêu của chúng tôi"
     >
       <AnimatedGradient className="z-0 opacity-40" />
 
@@ -110,10 +110,10 @@ export function StorySection() {
         <Reveal direction="up">
           <div className="mb-14 flex flex-col items-center gap-3 text-center">
             <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-              Perjalanan Kami
+              Hành Trình Của Chúng Tôi
             </span>
             <h2 className="font-serif text-3xl font-bold gold-text sm:text-4xl">
-              Cerita Cinta
+              Love Story
             </h2>
             <div className="gold-divider w-24" aria-hidden />
           </div>
@@ -122,7 +122,7 @@ export function StorySection() {
         <div className="flex flex-col gap-10">
           {story.map((item, i) => (
             <StoryCard
-              key={item.year}
+              key={`${item.year}-${item.month}-${i}`}
               item={item}
               index={i}
               isLeft={i % 2 === 0}

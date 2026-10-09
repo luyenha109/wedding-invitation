@@ -14,7 +14,7 @@ export function HeroSection() {
     <section
       id="hero"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-24 section-padding"
-      aria-label="Nama pasangan pengantin"
+      aria-label="Tên chú rể cô dâu"
     >
       <AnimatedGradient className="z-0" />
       <FloatingParticles count={22} className="z-0" />
@@ -31,13 +31,68 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
           className="flex flex-col items-center gap-3"
         >
-          <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-            The Wedding Of
-          </span>
           <div className="gold-divider w-16" aria-hidden />
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+          className="grid w-full grid-cols-1 gap-6 sm:grid-cols-[1fr_1px_1fr] sm:gap-10"
+        >
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="font-sans text-xs uppercase tracking-[0.3em] text-[#D4AF37]">
+              Nhà Trai
+            </span>
+            <p className="font-serif text-base italic text-[color:var(--text-secondary)]">
+              {couple.groomParents}
+            </p>
+            <p className="max-w-xs font-sans text-sm leading-relaxed text-[color:var(--text-muted)]">
+              {event.reception.address}
+            </p>
+          </div>
+
+          <div
+            className="hidden w-px self-stretch bg-[#D4AF37]/20 sm:block"
+            aria-hidden
+          />
+
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="font-sans text-xs uppercase tracking-[0.3em] text-[#D4AF37]">
+              Nhà Gái
+            </span>
+            <p className="font-serif text-base italic text-[color:var(--text-secondary)]">
+              {couple.brideParents}
+            </p>
+            <p className="max-w-xs font-sans text-sm leading-relaxed text-[color:var(--text-muted)]">
+              {event.akad.address}
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
+          className="flex flex-col items-center gap-2"
+        >
+          <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
+            Trân Trọng Báo Tin
+          </span>
+          <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
+            Lễ Thành Hôn Của Hai Con Chúng Tôi
+          </span>
+        </motion.div>
+
         <div className="flex flex-col items-center gap-3">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="font-sans text-[10px] uppercase tracking-[0.35em] text-[#D4AF37]"
+          >
+            {couple.groomTitle}
+          </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,38 +120,23 @@ export function HeroSection() {
           >
             {couple.brideFull}
           </motion.h1>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="font-sans text-[10px] uppercase tracking-[0.35em] text-[#D4AF37]"
+          >
+            {couple.brideTitle}
+          </motion.span>
         </div>
-
-        <Reveal delay={0.9} direction="up">
-          <div className="flex flex-col items-center gap-4">
-            <div className="gold-divider w-32" aria-hidden />
-            <div className="flex flex-col items-center gap-1.5">
-              <p className="font-sans text-sm font-medium uppercase tracking-[0.25em] text-[#D4AF37]">
-                {event.akad.day}, {new Date(event.akad.date).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-              <p className="font-sans text-sm text-[color:var(--text-muted)]">
-                {event.akad.venue} — {event.akad.city}
-              </p>
-            </div>
-            <p className="font-sans text-xs text-[color:var(--text-muted)] tracking-wider">
-              {hashtag}
-            </p>
-          </div>
-        </Reveal>
 
         <Reveal delay={1.1} direction="up">
           <div className="flex flex-col items-center gap-2 pt-4">
             <p className="font-serif text-base italic text-[color:var(--text-secondary)] max-w-sm text-balance leading-relaxed">
-              &ldquo;Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan
-              untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung
-              dan merasa tenteram kepadanya.&rdquo;
+              &ldquo;Với niềm hạnh phúc trọn vẹn, chúng tôi kính mời quý quan khách đến dự và gửi những lời chúc phúc.&ldquo;
             </p>
             <p className="font-sans text-xs text-[color:var(--text-muted)]">
-              — QS. Ar-Rum: 21
+              — Nhà Trai & Nhà Gái —
             </p>
           </div>
         </Reveal>

@@ -9,7 +9,7 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({
-  message = "Terjadi kesalahan. Silakan coba lagi.",
+  message = "Đã xảy ra lỗi. Vui lòng thử lại.",
   onRetry,
   className,
 }: ErrorStateProps) {
@@ -29,7 +29,7 @@ export function ErrorState({
       </p>
       {onRetry && (
         <Button variant="outline" size="sm" onClick={onRetry}>
-          Coba Lagi
+          Thử Lại
         </Button>
       )}
     </div>

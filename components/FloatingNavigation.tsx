@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { APPS_SCRIPT_ENABLED } from "@/lib/constants";
 
 interface NavItem {
   id: string;
@@ -10,14 +11,18 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: "hero", label: "Beranda" },
-  { id: "countdown", label: "Hitung Mundur" },
-  { id: "event", label: "Acara" },
-  { id: "gallery", label: "Galeri" },
-  { id: "story", label: "Cerita" },
-  { id: "rsvp", label: "RSVP" },
-  { id: "guestbook", label: "Ucapan" },
-  { id: "gift", label: "Hadiah" },
+  { id: "hero", label: "Trang Chủ" },
+  { id: "countdown", label: "Đếm Ngược" },
+  { id: "event", label: "Sự Kiện" },
+  { id: "gallery", label: "Thư Viện" },
+  { id: "story", label: "Câu Chuyện" },
+  ...(APPS_SCRIPT_ENABLED
+    ? [
+        { id: "rsvp", label: "RSVP" },
+        { id: "guestbook", label: "Lời Chúc" },
+      ]
+    : []),
+  { id: "gift", label: "Quà Tặng" },
 ];
 
 export function FloatingNavigation() {
@@ -64,7 +69,7 @@ export function FloatingNavigation() {
           exit={{ opacity: 0, x: 40 }}
           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
           className="fixed right-4 top-1/2 z-40 -translate-y-1/2"
-          aria-label="Navigasi halaman"
+          aria-label="Điều hướng trang"
         >
           <div className="flex flex-col items-end gap-1.5">
             <AnimatePresence>
@@ -113,7 +118,7 @@ export function FloatingNavigation() {
                 "hover:border-[#D4AF37]/60 hover:shadow-[0_4px_20px_rgba(212,175,55,0.2)]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
               )}
-              aria-label={expanded ? "Tutup menu navigasi" : "Buka menu navigasi"}
+              aria-label={expanded ? "Đóng menu điều hướng" : "Mở menu điều hướng"}
               aria-expanded={expanded}
             >
               <motion.div

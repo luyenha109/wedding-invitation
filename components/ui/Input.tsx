@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         >
           {label}
           {props.required && (
-            <span className="ml-1 text-[#D4AF37]" aria-label="wajib diisi">
+            <span className="ml-1 text-[#D4AF37]" aria-label="bắt buộc">
               *
             </span>
           )}

@@ -65,7 +65,7 @@ export function MusicPlayer({
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
           className
         )}
-        aria-label={playing ? "Pause musik" : "Putar musik latar"}
+        aria-label={playing ? "Pause music" : "Play music"}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.93 }}
         transition={{ duration: 0.15 }}

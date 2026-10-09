@@ -16,8 +16,8 @@ export function FooterSection() {
 
   async function handleShare() {
     const shareData = {
-      title: `Pernikahan ${couple.groomFull} & ${couple.brideFull}`,
-      text: `Anda diundang ke pernikahan ${couple.groomFull} & ${couple.brideFull} pada Sabtu, 20 Desember 2026 di Yogyakarta. ${hashtag}`,
+      title: `Đám cưới ${couple.groomFull} & ${couple.brideFull}`,
+      text: `Bạn được mời đến dự đám cưới ${couple.groomFull} & ${couple.brideFull} vào Thứ Bảy, ngày 20 tháng 12 năm 2026 tại Yogyakarta. ${hashtag}`,
       url: SITE_URL,
     };
 
@@ -42,7 +42,7 @@ export function FooterSection() {
     <footer
       id="footer"
       className="relative overflow-hidden pt-24 pb-12 section-padding"
-      aria-label="Footer undangan"
+      aria-label="Chân trang thiệp mời"
     >
       <FloatingParticles count={14} className="z-0" />
 
@@ -57,7 +57,7 @@ export function FooterSection() {
       <div className="relative z-10 mx-auto max-w-2xl flex flex-col items-center gap-10 text-center">
         <div className="flex flex-col items-center gap-2">
           <span className="font-sans text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-            Dengan Cinta
+            Với Tình Yêu
           </span>
           <div className="gold-divider w-16 my-2" aria-hidden />
           <GoldShimmerText
@@ -73,8 +73,8 @@ export function FooterSection() {
 
         <div className="flex flex-col items-center gap-3">
           <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-xs">
-            Bagikan undangan ini kepada keluarga dan sahabat yang ingin Anda
-            ajak bersama.
+            Chia sẻ thiệp mời này đến gia đình và bạn bè mà bạn muốn cùng
+            tham dự.
           </p>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
             <Button
@@ -82,7 +82,7 @@ export function FooterSection() {
               size="md"
               onClick={handleShare}
               className="gap-2"
-              aria-label="Bagikan undangan ini"
+              aria-label="Chia sẻ thiệp mời này"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {shared ? (
@@ -94,7 +94,7 @@ export function FooterSection() {
                     className="flex items-center gap-2"
                   >
                     <Check className="h-4 w-4 text-emerald-400" aria-hidden />
-                    Link Tersalin!
+                    Đã Sao Chép Liên Kết!
                   </motion.span>
                 ) : (
                   <motion.span
@@ -105,7 +105,7 @@ export function FooterSection() {
                     className="flex items-center gap-2"
                   >
                     <Share2 className="h-4 w-4" aria-hidden />
-                    Bagikan Undangan
+                    Chia Sẻ Thiệp Mời
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -117,13 +117,13 @@ export function FooterSection() {
 
         <div className="flex flex-col items-center gap-3">
           <p className="font-sans text-xs text-[color:var(--text-muted)] leading-relaxed max-w-sm">
-            Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila
-            Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
+            Đó là vinh dự và niềm hạnh phúc của chúng tôi nếu quý vị có thể
+            đến dự và gửi lời chúc phúc.
           </p>
           <div className="flex items-center gap-2 text-xs text-[color:var(--text-muted)]">
-            <span>Dibuat dengan</span>
+            <span>Được tạo với</span>
             <Heart className="h-3 w-3 text-[#D4AF37]" aria-hidden />
-            <span>untuk momen yang tak terlupakan</span>
+            <span>cho một khoảnh khắc khó quên</span>
           </div>
           <p className="font-sans text-xs text-[color:var(--text-muted)]/60">
             © 2026 {couple.groomFull} &amp; {couple.brideFull}

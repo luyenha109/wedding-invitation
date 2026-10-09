@@ -4,7 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { submitRsvp } from "@/lib/api";
 import type { RsvpPayload } from "@/types/invitation";
 import type { FetchState } from "@/types/api";
-import { RSVP_COOLDOWN_MS } from "@/lib/constants";
+import { APPS_SCRIPT_ENABLED, RSVP_COOLDOWN_MS } from "@/lib/constants";
 
 interface UseRsvpReturn {
   state: FetchState<Record<string, never>>;
@@ -19,11 +19,19 @@ export function useRsvp(): UseRsvpReturn {
   const lastSubmit = useRef<number>(0);
 
   const submit = useCallback(async (payload: RsvpPayload) => {
+    if (!APPS_SCRIPT_ENABLED) {
+      setState({
+        status: "error",
+        message: "Tính năng RSVP chưa khả dụng.",
+      });
+      return;
+    }
+
     const now = Date.now();
     if (now - lastSubmit.current < RSVP_COOLDOWN_MS) {
       setState({
         status: "error",
-        message: "Mohon tunggu sebentar sebelum mengirim ulang.",
+        message: "Vui lòng đợi một lát trước khi gửi lại.",
       });
       return;
     }
@@ -40,7 +48,7 @@ export function useRsvp(): UseRsvpReturn {
       }
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Gagal mengirim RSVP";
+        err instanceof Error ? err.message : "Không thể gửi RSVP";
       setState({ status: "error", message });
     }
   }, []);
