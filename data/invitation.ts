@@ -104,37 +104,37 @@ export const invitationData: InvitationData = {
   ],
   gallery: [
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535659/wedding_gallery_bulk/1_ze7wz8.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 1",
       width: 800,
       height: 600,
     },
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535663/wedding_gallery_bulk/2_xduyqw.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 2",
       width: 800,
       height: 1000,
     },
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535665/wedding_gallery_bulk/3_rysxlu.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 3",
       width: 800,
       height: 600,
     },
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535668/wedding_gallery_bulk/4_jl5m62.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 4",
       width: 800,
       height: 1000,
     },
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535669/wedding_gallery_bulk/5_emal8l.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 5",
       width: 800,
       height: 600,
     },
     {
-      src: "https://res.cloudinary.com/doacdf3gx/image/upload/v1781535671/wedding_gallery_bulk/6_d6mmvs.jpg",
+      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 6",
       width: 800,
       height: 1000,

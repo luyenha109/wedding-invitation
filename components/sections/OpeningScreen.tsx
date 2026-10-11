@@ -14,7 +14,7 @@ interface OpeningScreenProps {
 
 function formatDate(iso: string) {
   const [year, month, day] = iso.split("-");
-  return `${day}/${month}/${year}`;
+  return `${day}-${month}-${year}`;
 }
 
 export function OpeningScreen({ guestName, onOpen }: OpeningScreenProps) {
@@ -104,13 +104,13 @@ export function OpeningScreen({ guestName, onOpen }: OpeningScreenProps) {
             >
               <div className="flex flex-col items-center gap-0.5">
                 <p className="font-sans text-sm text-[color:var(--text-muted)]">
-                  {event.akad.name} — {event.akad.day},{" "}
+                  {event.akad.venue} — {event.akad.day},{" "}
                   {formatDate(event.akad.date)}
                 </p>
               </div>
               <div className="mt-2 flex flex-col items-center gap-0.5">
                 <p className="font-sans text-sm text-[color:var(--text-muted)]">
-                  {event.reception.name} — {event.reception.day},{" "}
+                  {event.reception.venue} — {event.reception.day},{" "}
                   {formatDate(event.reception.date)}
                 </p>
               </div>
