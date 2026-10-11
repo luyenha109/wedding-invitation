@@ -58,6 +58,8 @@ export default function WeddingPage({
   const guestName = readGuestName(use(searchParams));
   const isDisabledAppScript = !APPS_SCRIPT_ENABLED;
 
+  const musicUrl = 'https://soundcloud.com/ph-m-huy/co-dau-ai-phuong-mp3-320kbps?in=lec995/sets/v';
+
   return (
     <>
       {!opened && (
@@ -67,7 +69,7 @@ export default function WeddingPage({
       {opened && (
         <>
           <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
-            <MusicPlayer />
+            <MusicPlayer soundcloudUrl={musicUrl} />
             <ThemeToggle />
           </div>
 

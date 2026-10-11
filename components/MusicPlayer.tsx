@@ -5,35 +5,117 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Music2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const SC_WIDGET_API = "https://w.soundcloud.com/player/api.js";
+
+type SoundCloudWidget = {
+  play: () => void;
+  pause: () => void;
+  bind: (event: string, listener: () => void) => void;
+};
+
+type SoundCloudApi = {
+  Widget: ((element: HTMLIFrameElement) => SoundCloudWidget) & {
+    Events: { READY: string; PLAY: string; PAUSE: string; FINISH: string };
+  };
+};
+
+declare global {
+  interface Window {
+    SC?: SoundCloudApi;
+  }
+}
+
 interface MusicPlayerProps {
   src?: string;
+  /** SoundCloud track or playlist URL. When set, it replaces the local audio file. */
+  soundcloudUrl?: string;
   className?: string;
+}
+
+function loadSoundCloudApi(): Promise<SoundCloudApi> {
+  if (window.SC) return Promise.resolve(window.SC);
+
+  const existing = document.querySelector<HTMLScriptElement>(
+    `script[src="${SC_WIDGET_API}"]`
+  );
+  const script = existing ?? document.createElement("script");
+
+  if (!existing) {
+    script.src = SC_WIDGET_API;
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  return new Promise((resolve, reject) => {
+    script.addEventListener(
+      "load",
+      () => (window.SC ? resolve(window.SC) : reject(new Error("no SC"))),
+      { once: true }
+    );
+    script.addEventListener("error", () => reject(new Error("SC load failed")), {
+      once: true,
+    });
+  });
 }
 
 export function MusicPlayer({
   src = "/audio/wedding-music.mp3",
+  soundcloudUrl,
   className,
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const widgetRef = useRef<SoundCloudWidget | null>(null);
   const [playing, setPlaying] = useState(false);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onCanPlay = () => setReady(true);
     const onEnded = () => setPlaying(false);
 
-    audio.addEventListener("canplaythrough", onCanPlay);
     audio.addEventListener("ended", onEnded);
-    return () => {
-      audio.removeEventListener("canplaythrough", onCanPlay);
-      audio.removeEventListener("ended", onEnded);
-    };
+    return () => audio.removeEventListener("ended", onEnded);
   }, []);
 
+  useEffect(() => {
+    if (!soundcloudUrl) return;
+    let disposed = false;
+
+    loadSoundCloudApi()
+      .then((SC) => {
+        if (disposed || !iframeRef.current) return;
+        const widget = SC.Widget(iframeRef.current);
+        widgetRef.current = widget;
+        widget.bind(SC.Widget.Events.PLAY, () => setPlaying(true));
+        widget.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
+        widget.bind(SC.Widget.Events.FINISH, () => setPlaying(false));
+      })
+      .catch(() => {
+        if (!disposed) setPlaying(false);
+      });
+
+    return () => {
+      disposed = true;
+      widgetRef.current = null;
+    };
+  }, [soundcloudUrl]);
+
   async function togglePlay() {
+    if (soundcloudUrl) {
+      const widget = widgetRef.current;
+      if (!widget) return;
+
+      if (playing) {
+        widget.pause();
+        setPlaying(false);
+      } else {
+        widget.play();
+        setPlaying(true);
+      }
+      return;
+    }
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -52,9 +134,27 @@ export function MusicPlayer({
     }
   }
 
+  const soundcloudSrc = soundcloudUrl
+    ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+        soundcloudUrl
+      )}&color=%23D4AF37&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`
+    : null;
+
   return (
     <>
-      <audio ref={audioRef} src={src} preload="metadata" aria-hidden />
+      {soundcloudSrc ? (
+        <iframe
+          ref={iframeRef}
+          title="SoundCloud player"
+          src={soundcloudSrc}
+          allow="autoplay"
+          aria-hidden
+          tabIndex={-1}
+          className="pointer-events-none absolute h-px w-px opacity-0"
+        />
+      ) : (
+        <audio ref={audioRef} src={src} preload="metadata" aria-hidden />
+      )}
       <motion.button
         onClick={togglePlay}
         className={cn(
