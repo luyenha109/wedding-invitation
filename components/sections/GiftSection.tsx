@@ -11,14 +11,20 @@ import type { GiftAccount } from "@/types/invitation";
 
 function AccountCard({ account }: { account: GiftAccount }) {
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   async function handleCopy(text: string) {
     try {
       await copyToClipboard(text);
+      setFailed(false);
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
-      // Clipboard API might not be supported, fallback to prompt
+      // Không sao chép được (thường gặp trong trình duyệt trong app trên iOS).
+      // Hiện hướng dẫn để khách sao chép thủ công.
+      setCopied(false);
+      setFailed(true);
+      setTimeout(() => setFailed(false), 6000);
     }
   }
 
@@ -55,7 +61,7 @@ function AccountCard({ account }: { account: GiftAccount }) {
             Số tài khoản
           </p>
           <div className="flex items-center gap-3">
-            <p className="font-mono text-base font-bold tracking-widest text-[#D4AF37]">
+            <p className="select-all font-mono text-base font-bold tracking-widest text-[#D4AF37]">
               {account.accountNumber}
             </p>
             <motion.button
@@ -112,6 +118,20 @@ function AccountCard({ account }: { account: GiftAccount }) {
                 Đã sao chép số tài khoản {account.label} vào clipboard
               </motion.p>
             )}
+            {failed && (
+              <motion.p
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="text-[0.65rem] text-amber-400"
+                role="status"
+                aria-live="polite"
+              >
+                Trình duyệt không cho sao chép tự động. Nhấn giữ số tài khoản
+                {" "}
+                {account.accountNumber} để sao chép thủ công.
+              </motion.p>
+            )}
           </AnimatePresence>
         </div>
       </div>
@@ -154,7 +174,7 @@ export function GiftSection() {
 
         <Reveal delay={0.25} direction="up">
           <p className="mt-6 text-center font-sans text-xs text-[color:var(--text-muted)] leading-relaxed">
-            Bạn có thể xác nhận chuyển khoản qua Facebook hoặc Zalo cho gia đình cô dâu
+            Bạn có thể xác nhận chuyển khoản qua Messenger hoặc Zalo cho gia đình cô dâu
             chú rể. Cảm ơn tấm lòng tốt của bạn.
           </p>
         </Reveal>

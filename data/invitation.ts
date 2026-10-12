@@ -57,7 +57,7 @@ export const invitationData: InvitationData = {
       month: "10",
       title: "Lần Đầu Gặp Gỡ",
       description:
-        "Vô tình gặp nhau trên mạng xã hội, bắt đầu trò chuyện, rồi có buổi gặp gỡ đầu tiên.",
+        "Chúng tôi vô tình gặp nhau, rồi bắt đầu trò chuyện.",
     },
     {
       year: "2025",
@@ -104,37 +104,37 @@ export const invitationData: InvitationData = {
   ],
   gallery: [
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/F4NPDBcj/wedding3.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 1",
       width: 800,
       height: 600,
     },
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/60WJN5v7/wedding2.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 2",
       width: 800,
       height: 1000,
     },
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/G48wSsVv/wedding1.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 3",
       width: 800,
       height: 600,
     },
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/KjfHBB1Q/wedding4.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 4",
       width: 800,
       height: 1000,
     },
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/FkfBpd5N/wedding5.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 5",
       width: 800,
       height: 600,
     },
     {
-      src: "https://i.ibb.co/Y4H6zVby/IMG-0329.jpg",
+      src: "https://i.ibb.co/PZTdMH0q/wedding22.jpg",
       alt: "Luyến Hà và Thơ Nguyễn — Ảnh Pre-Wedding 6",
       width: 800,
       height: 1000,

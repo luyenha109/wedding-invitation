@@ -1,160 +1,87 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
+import type { Ref } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Music2 } from "lucide-react";
+import { Pause, Music2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SC_WIDGET_API = "https://w.soundcloud.com/player/api.js";
-
-type SoundCloudWidget = {
+export interface MusicPlayerHandle {
   play: () => void;
   pause: () => void;
-  bind: (event: string, listener: () => void) => void;
-};
-
-type SoundCloudApi = {
-  Widget: ((element: HTMLIFrameElement) => SoundCloudWidget) & {
-    Events: { READY: string; PLAY: string; PAUSE: string; FINISH: string };
-  };
-};
-
-declare global {
-  interface Window {
-    SC?: SoundCloudApi;
-  }
 }
 
 interface MusicPlayerProps {
   src?: string;
-  /** SoundCloud track or playlist URL. When set, it replaces the local audio file. */
-  soundcloudUrl?: string;
   className?: string;
-}
-
-function loadSoundCloudApi(): Promise<SoundCloudApi> {
-  if (window.SC) return Promise.resolve(window.SC);
-
-  const existing = document.querySelector<HTMLScriptElement>(
-    `script[src="${SC_WIDGET_API}"]`
-  );
-  const script = existing ?? document.createElement("script");
-
-  if (!existing) {
-    script.src = SC_WIDGET_API;
-    script.async = true;
-    document.body.appendChild(script);
-  }
-
-  return new Promise((resolve, reject) => {
-    script.addEventListener(
-      "load",
-      () => (window.SC ? resolve(window.SC) : reject(new Error("no SC"))),
-      { once: true }
-    );
-    script.addEventListener("error", () => reject(new Error("SC load failed")), {
-      once: true,
-    });
-  });
+  ref?: Ref<MusicPlayerHandle>;
 }
 
 export function MusicPlayer({
   src = "/audio/wedding-music.mp3",
-  soundcloudUrl,
   className,
+  ref,
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const widgetRef = useRef<SoundCloudWidget | null>(null);
   const [playing, setPlaying] = useState(false);
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      play() {
+        const audio = audioRef.current;
+        if (!audio) return;
+        // Must stay synchronous with the caller's tap: iOS grants playback
+        // permission only inside the originating user gesture.
+        audio.play().catch(() => setPlaying(false));
+      },
+      pause() {
+        audioRef.current?.pause();
+      },
+    }),
+    []
+  );
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onEnded = () => setPlaying(false);
+    audio.volume = 0.5;
 
-    audio.addEventListener("ended", onEnded);
-    return () => audio.removeEventListener("ended", onEnded);
+    const onPlay = () => setPlaying(true);
+    const onStop = () => setPlaying(false);
+
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onStop);
+    audio.addEventListener("ended", onStop);
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onStop);
+      audio.removeEventListener("ended", onStop);
+    };
   }, []);
 
-  useEffect(() => {
-    if (!soundcloudUrl) return;
-    let disposed = false;
-
-    loadSoundCloudApi()
-      .then((SC) => {
-        if (disposed || !iframeRef.current) return;
-        const widget = SC.Widget(iframeRef.current);
-        widgetRef.current = widget;
-        widget.bind(SC.Widget.Events.PLAY, () => setPlaying(true));
-        widget.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
-        widget.bind(SC.Widget.Events.FINISH, () => setPlaying(false));
-      })
-      .catch(() => {
-        if (!disposed) setPlaying(false);
-      });
-
-    return () => {
-      disposed = true;
-      widgetRef.current = null;
-    };
-  }, [soundcloudUrl]);
-
-  async function togglePlay() {
-    if (soundcloudUrl) {
-      const widget = widgetRef.current;
-      if (!widget) return;
-
-      if (playing) {
-        widget.pause();
-        setPlaying(false);
-      } else {
-        widget.play();
-        setPlaying(true);
-      }
-      return;
-    }
-
+  function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
+    if (audio.paused) {
+      audio.play().catch(() => setPlaying(false));
     } else {
-      try {
-        audio.volume = 0.5;
-        audio.loop = true;
-        await audio.play();
-        setPlaying(true);
-      } catch {
-        setPlaying(false);
-      }
+      audio.pause();
     }
   }
 
-  const soundcloudSrc = soundcloudUrl
-    ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(
-        soundcloudUrl
-      )}&color=%23D4AF37&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`
-    : null;
-
   return (
     <>
-      {soundcloudSrc ? (
-        <iframe
-          ref={iframeRef}
-          title="SoundCloud player"
-          src={soundcloudSrc}
-          allow="autoplay"
-          aria-hidden
-          tabIndex={-1}
-          className="pointer-events-none absolute h-px w-px opacity-0"
-        />
-      ) : (
-        <audio ref={audioRef} src={src} preload="metadata" aria-hidden />
-      )}
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="auto"
+        loop
+        playsInline
+        aria-hidden
+      />
       <motion.button
         onClick={togglePlay}
         className={cn(

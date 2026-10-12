@@ -9,7 +9,13 @@ import { invitationData } from "@/data/invitation";
 
 interface OpeningScreenProps {
   guestName: string;
+  /**
+   * Fired synchronously from the tap so the music can start inside the
+   * originating user gesture (required by iOS Safari).
+   */
   onOpen: () => void;
+  /** Fired after the closing animation, when the invitation is revealed. */
+  onOpenComplete: () => void;
 }
 
 function formatDate(iso: string) {
@@ -17,12 +23,17 @@ function formatDate(iso: string) {
   return `${day}-${month}-${year}`;
 }
 
-export function OpeningScreen({ guestName, onOpen }: OpeningScreenProps) {
+export function OpeningScreen({
+  guestName,
+  onOpen,
+  onOpenComplete,
+}: OpeningScreenProps) {
   const [closing, setClosing] = useState(false);
 
   function handleOpen() {
+    onOpen();
     setClosing(true);
-    setTimeout(onOpen, 900);
+    setTimeout(onOpenComplete, 900);
   }
 
   const { couple, event } = invitationData;

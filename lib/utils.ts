@@ -48,11 +48,63 @@ export function isValidUrl(url: string): boolean {
   }
 }
 
-export function copyToClipboard(text: string): Promise<void> {
-  if (typeof navigator !== "undefined" && navigator.clipboard) {
-    return navigator.clipboard.writeText(text);
+/**
+ * Sao chép văn bản bằng execCommand — đường dự phòng cho trình duyệt không hỗ
+ * trợ Clipboard API (WKWebView của Zalo/Messenger/Facebook trên iOS) hoặc khi
+ * Clipboard API bị từ chối.
+ *
+ * iOS yêu cầu textarea phải nằm trong DOM, không readonly, và có selection hợp
+ * lệ thì execCommand("copy") mới chạy.
+ */
+function legacyCopy(text: string): boolean {
+  if (typeof document === "undefined") return false;
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("aria-hidden", "true");
+  // font-size >= 16px tránh iOS tự zoom trang khi focus.
+  textarea.style.cssText =
+    "position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;outline:0;box-shadow:none;background:transparent;font-size:16px;opacity:0;";
+
+  const selection = document.getSelection();
+  const previousRange =
+    selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+
+  document.body.appendChild(textarea);
+  textarea.focus({ preventScroll: true });
+  textarea.select();
+  textarea.setSelectionRange(0, text.length); // iOS: cần cho execCommand copy
+
+  let succeeded = false;
+  try {
+    succeeded = document.execCommand("copy");
+  } catch {
+    succeeded = false;
   }
-  return Promise.reject(new Error("Clipboard API không khả dụng"));
+
+  document.body.removeChild(textarea);
+
+  if (selection) {
+    selection.removeAllRanges();
+    if (previousRange) selection.addRange(previousRange);
+  }
+
+  return succeeded;
+}
+
+export async function copyToClipboard(text: string): Promise<void> {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Bị từ chối (NotAllowedError) hoặc không có quyền — thử đường dự phòng.
+    }
+  }
+
+  if (legacyCopy(text)) return;
+
+  throw new Error("Không thể sao chép. Vui lòng sao chép thủ công.");
 }
 
 export function truncate(str: string, maxLength: number): string {

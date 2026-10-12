@@ -60,9 +60,9 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     images: [
       {
-        url: `${SITE_URL}/images/og-image.png`,
+        url: `${SITE_URL}/images/wedding1.jpg`,
         width: 1200,
-        height: 630,
+        height: 1900,
         alt: "Đám cưới Luyến Hà & Thơ Nguyễn",
       },
     ],
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     title: "Đám cưới Luyến Hà & Thơ Nguyễn — 28 tháng 11 năm 2026",
     description:
       "Chúng tôi mời bạn đến chứng kiến khoảnh khắc hạnh phúc của chúng tôi. Thứ Bảy, ngày 28 tháng 11 năm 2026, Cát Tiên 3, Lâm Đồng.",
-    images: [`${SITE_URL}/images/og-image.png`],
+    images: [`${SITE_URL}/images/wedding1.jpg`],
   },
 };
 

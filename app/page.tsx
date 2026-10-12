@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense, use } from "react";
+import { useState, useRef, Suspense, use } from "react";
 import dynamic from "next/dynamic";
 import { OpeningScreen } from "@/components/sections/OpeningScreen";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -11,7 +11,7 @@ import { RsvpSection } from "@/components/sections/RsvpSection";
 import { GiftSection } from "@/components/sections/GiftSection";
 import { FooterSection } from "@/components/sections/FooterSection";
 import { FloatingNavigation } from "@/components/FloatingNavigation";
-import { MusicPlayer } from "@/components/MusicPlayer";
+import { MusicPlayer, type MusicPlayerHandle } from "@/components/MusicPlayer";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { APPS_SCRIPT_ENABLED, MAX_MESSAGE_LENGTH } from "@/lib/constants";
@@ -55,24 +55,29 @@ export default function WeddingPage({
   searchParams: Promise<SearchParams>;
 }) {
   const [opened, setOpened] = useState(false);
+  const musicRef = useRef<MusicPlayerHandle>(null);
   const guestName = readGuestName(use(searchParams));
   const isDisabledAppScript = !APPS_SCRIPT_ENABLED;
-
-  const musicUrl = 'https://soundcloud.com/ph-m-huy/co-dau-ai-phuong-mp3-320kbps?in=lec995/sets/v';
 
   return (
     <>
       {!opened && (
-        <OpeningScreen guestName={guestName} onOpen={() => setOpened(true)} />
+        <OpeningScreen
+          guestName={guestName}
+          onOpen={() => musicRef.current?.play()}
+          onOpenComplete={() => setOpened(true)}
+        />
       )}
+
+      {/* Mounted before the invitation opens so the audio element is loaded
+          and the opening tap can start playback inside the same user gesture. */}
+      <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+        <MusicPlayer ref={musicRef} className={opened ? undefined : "invisible"} />
+        {opened && <ThemeToggle />}
+      </div>
 
       {opened && (
         <>
-          <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
-            <MusicPlayer soundcloudUrl={musicUrl} />
-            <ThemeToggle />
-          </div>
-
           <FloatingNavigation />
 
           <main id="main-content" tabIndex={-1}>

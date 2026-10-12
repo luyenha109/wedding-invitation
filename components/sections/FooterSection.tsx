@@ -12,6 +12,7 @@ import { copyToClipboard } from "@/lib/utils";
 
 export function FooterSection() {
   const [shared, setShared] = useState(false);
+  const [failed, setFailed] = useState(false);
   const { couple, hashtag } = invitationData;
 
   async function handleShare() {
@@ -28,13 +29,20 @@ export function FooterSection() {
         navigator.canShare?.(shareData)
       ) {
         await navigator.share(shareData);
-      } else {
-        await copyToClipboard(SITE_URL);
-        setShared(true);
-        setTimeout(() => setShared(false), 2500);
+        return;
       }
-    } catch {
-      // User membatalkan share atau error
+
+      await copyToClipboard(SITE_URL);
+      setFailed(false);
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } catch (error) {
+      // Người dùng huỷ hộp thoại chia sẻ — không phải lỗi.
+      if (error instanceof DOMException && error.name === "AbortError") return;
+
+      setShared(false);
+      setFailed(true);
+      setTimeout(() => setFailed(false), 6000);
     }
   }
 
@@ -111,6 +119,22 @@ export function FooterSection() {
               </AnimatePresence>
             </Button>
           </motion.div>
+          <AnimatePresence>
+            {failed && (
+              <motion.p
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="font-sans text-xs text-amber-400 text-center max-w-xs"
+                role="status"
+                aria-live="polite"
+              >
+                Trình duyệt không cho sao chép tự động. Nhấn giữ liên kết{" "}
+                <span className="select-all">{SITE_URL}</span> để sao chép thủ
+                công.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="gold-divider w-full" aria-hidden />
