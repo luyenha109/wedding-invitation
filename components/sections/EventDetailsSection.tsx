@@ -20,6 +20,12 @@ function EventCard({
     year: "numeric",
   });
 
+  const displayDateLunar = new Date(detail.dateLunar).toLocaleDateString("vi-VN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
   return (
     <Reveal delay={delay} direction="up">
       <article className="card-glass rounded-3xl p-8 flex flex-col gap-6 border border-[#D4AF37]/15 shadow-[0_4px_24px_rgba(212,175,55,0.08)]">
@@ -44,9 +50,25 @@ function EventCard({
           </div>
 
           <div className="flex items-start gap-3">
+            <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" aria-hidden />
+            <div>
+              <p className="font-sans text-sm text-[color:var(--text-primary)]">
+                Nhằm ngày {displayDateLunar}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
             <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-primary)]">
-              {detail.time}
+              {detail.time} - Lễ cưới
+            </p>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" aria-hidden />
+            <p className="font-sans text-sm text-[color:var(--text-primary)]">
+              {detail.timeParty} - Khai tiệc
             </p>
           </div>
 

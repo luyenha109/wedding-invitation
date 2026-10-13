@@ -15,8 +15,10 @@ export const invitationData: InvitationData = {
     akad: {
       name: "Tại Nhà Gái",
       date: "2026-11-25",
+      dateLunar: "2026-10-17",
       day: "Thứ Tư",
       time: "08:00",
+      timeParty: "10:30",
       venue: "Nhà Gái",
       address: "Thôn Phú Bình, Xã Đạ Tẻh, Tỉnh Lâm Đồng",
       city: "Lâm Đồng",
@@ -27,8 +29,10 @@ export const invitationData: InvitationData = {
     reception: {
       name: "Tại Nhà Trai",
       date: "2026-11-28",
+      dateLunar: "2026-10-20",
       day: "Thứ Bảy",
       time: "08:00",
+      timeParty: "10:30",
       venue: "Nhà Trai",
       address: "Thôn Tân Xuân, Xã Cát Tiên 3, Tỉnh Lâm Đồng",
       city: "Lâm Đồng",

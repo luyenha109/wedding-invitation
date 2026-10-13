@@ -76,7 +76,7 @@ export function OpeningScreen({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-              className="flex w-full max-w-xl flex-col items-center gap-3"
+              className="flex w-full max-w-xl flex-col items-center gap-8"
             >
               <div className="flex flex-col items-center gap-1">
                 <GoldShimmerText
@@ -111,7 +111,7 @@ export function OpeningScreen({
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 1.1, ease: [0.19, 1, 0.22, 1] }}
-              className="flex flex-col items-center gap-1 mt-3"
+              className="flex flex-col items-center gap-1 mt-4"
             >
               <div className="flex flex-col items-center gap-0.5">
                 <p className="font-sans text-sm text-[color:var(--text-muted)]">

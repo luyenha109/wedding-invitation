@@ -17,8 +17,12 @@ export interface EventInfo {
 export interface EventDetail {
   name: string;
   date: string;
+  dateLunar: string;
   day: string;
+  // Giờ Lễ Cưới
   time: string;
+  /// Giờ Tiệc Cưới
+  timeParty: string;
   venue: string;
   address: string;
   city: string;
