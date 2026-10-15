@@ -18,7 +18,7 @@ export function FooterSection() {
   async function handleShare() {
     const shareData = {
       title: `Đám cưới ${couple.groomFull} & ${couple.brideFull}`,
-      text: `Bạn được mời đến dự đám cưới ${couple.groomFull} & ${couple.brideFull} vào Thứ Bảy, ngày 20 tháng 12 năm 2026 tại Yogyakarta. ${hashtag}`,
+      text: `Bạn được mời đến dự đám cưới ${couple.groomFull} & ${couple.brideFull} vào tháng 11 năm 2026 tại Lâm Đồng. ${hashtag}`,
       url: SITE_URL,
     };
 
@@ -81,8 +81,7 @@ export function FooterSection() {
 
         <div className="flex flex-col items-center gap-3">
           <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-xs">
-            Chia sẻ thiệp mời này đến gia đình và bạn bè mà bạn muốn cùng
-            tham dự.
+            Chia sẻ thiệp mời này đến bạn bè, người thân mà bạn muốn cùng tham dự.
           </p>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
             <Button

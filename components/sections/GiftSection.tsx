@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Copy, Check, Gift } from "lucide-react";
+import { Copy, Check, Gift, ChevronDown } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { invitationData } from "@/data/invitation";
 import { copyToClipboard } from "@/lib/utils";
@@ -12,6 +12,8 @@ import type { GiftAccount } from "@/types/invitation";
 function AccountCard({ account }: { account: GiftAccount }) {
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const panelId = useId();
 
   async function handleCopy(text: string) {
     try {
@@ -30,111 +32,141 @@ function AccountCard({ account }: { account: GiftAccount }) {
 
   return (
     <div className="card-glass h-full rounded-3xl border border-[#D4AF37]/15 overflow-hidden shadow-[0_4px_32px_rgba(212,175,55,0.08)]">
-      <div className="bg-gradient-to-br from-[#D4AF37]/10 to-transparent p-5 pb-4 border-b border-[#D4AF37]/10">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4AF37]/15">
-            <Gift className="h-4 w-4 text-[#D4AF37]" aria-hidden />
-          </div>
-          <div>
-            <p className="font-sans text-[0.65rem] uppercase tracking-widest text-[color:var(--text-muted)]">
-              {account.label}
-            </p>
-            <p className="font-serif text-sm font-semibold text-[color:var(--text-primary)]">
-              Ngân Hàng {account.bankName}
-            </p>
-          </div>
+      <button
+        type="button"
+        onClick={() => setExpanded((prev) => !prev)}
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        className={cn(
+          "flex w-full items-center gap-3 bg-gradient-to-br from-[#D4AF37]/10 to-transparent p-5 pb-4 text-left transition-colors duration-300",
+          "hover:from-[#D4AF37]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#D4AF37]",
+          expanded && "border-b border-[#D4AF37]/10"
+        )}
+      >
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+          <Gift className="h-4 w-4 text-[#D4AF37]" aria-hidden />
         </div>
-      </div>
-
-      <div className="p-5 flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
-            Chủ tài khoản
+        <div className="min-w-0 flex-1">
+          <p className="font-sans text-[0.65rem] uppercase tracking-widest text-[color:var(--text-muted)]">
+            {account.label}
           </p>
           <p className="font-serif text-sm font-semibold text-[color:var(--text-primary)]">
-            {account.accountHolder}
+            Ngân Hàng {account.bankName}
           </p>
         </div>
+        <motion.span
+          animate={{ rotate: expanded ? 180 : 0 }}
+          transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
+          className="shrink-0 text-[#D4AF37]"
+          aria-hidden
+        >
+          <ChevronDown className="h-4 w-4" />
+        </motion.span>
+      </button>
 
-        <div className="flex flex-col gap-2">
-          <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
-            Số tài khoản
-          </p>
-          <div className="flex items-center gap-3">
-            <p className="select-all font-mono text-base font-bold tracking-widest text-[#D4AF37]">
-              {account.accountNumber}
-            </p>
-            <motion.button
-              onClick={() => handleCopy(account.accountNumber)}
-              className={cn(
-                "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
-                copied
-                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
-                  : "border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/60"
-              )}
-              whileTap={{ scale: 0.9 }}
-              aria-label={
-                copied
-                  ? `Đã sao chép số tài khoản ${account.label}`
-                  : `Sao chép số tài khoản ${account.label}`
-              }
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {copied ? (
-                  <motion.span
-                    key="check"
-                    initial={{ scale: 0, rotate: -45 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            id={panelId}
+            key="panel"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.19, 1, 0.22, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-4 p-5">
+              <div className="flex flex-col gap-1">
+                <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
+                  Chủ tài khoản
+                </p>
+                <p className="font-serif text-sm font-semibold text-[color:var(--text-primary)]">
+                  {account.accountHolder}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <p className="font-sans text-[0.65rem] text-[color:var(--text-muted)]">
+                  Số tài khoản
+                </p>
+                <div className="flex items-center gap-3">
+                  <p className="select-all font-mono text-base font-bold tracking-widest text-[#D4AF37]">
+                    {account.accountNumber}
+                  </p>
+                  <motion.button
+                    onClick={() => handleCopy(account.accountNumber)}
+                    className={cn(
+                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
+                      copied
+                        ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
+                        : "border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/60"
+                    )}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label={
+                      copied
+                        ? `Đã sao chép số tài khoản ${account.label}`
+                        : `Sao chép số tài khoản ${account.label}`
+                    }
                   >
-                    <Check className="h-3.5 w-3.5" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="copy"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
-          </div>
-          <AnimatePresence>
-            {copied && (
-              <motion.p
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-[0.65rem] text-emerald-400"
-                role="status"
-                aria-live="polite"
-              >
-                Đã sao chép số tài khoản {account.label} vào clipboard
-              </motion.p>
-            )}
-            {failed && (
-              <motion.p
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-[0.65rem] text-amber-400"
-                role="status"
-                aria-live="polite"
-              >
-                Trình duyệt không cho sao chép tự động. Nhấn giữ số tài khoản
-                {" "}
-                {account.accountNumber} để sao chép thủ công.
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
+                    <AnimatePresence mode="wait" initial={false}>
+                      {copied ? (
+                        <motion.span
+                          key="check"
+                          initial={{ scale: 0, rotate: -45 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          exit={{ scale: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="copy"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                </div>
+                <AnimatePresence>
+                  {copied && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[0.65rem] text-emerald-400"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Đã sao chép số tài khoản {account.label} vào clipboard
+                    </motion.p>
+                  )}
+                  {failed && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[0.65rem] text-amber-400"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Trình duyệt không cho sao chép tự động. Nhấn giữ số tài khoản
+                      {" "}
+                      {account.accountNumber} để sao chép thủ công.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -174,8 +206,7 @@ export function GiftSection() {
 
         <Reveal delay={0.25} direction="up">
           <p className="mt-6 text-center font-sans text-xs text-[color:var(--text-muted)] leading-relaxed">
-            Bạn có thể xác nhận chuyển khoản qua Messenger hoặc Zalo cho gia đình cô dâu
-            chú rể. Cảm ơn tấm lòng tốt của bạn.
+            Bạn có thể xác nhận món quà qua Messenger hoặc Zalo cho cô dâu và chú rể. Cảm ơn tấm lòng tốt của bạn.
           </p>
         </Reveal>
       </div>

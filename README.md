@@ -1,4 +1,4 @@
-# Thiệp Cưới Kỹ Thuật Số Cao Cấp — Arga & Nimas
+# Thiệp Cưới Kỹ Thuật Số Cao Cấp
 
 Website thiệp cưới kỹ thuật số cao cấp sử dụng Next.js 15, Framer Motion và Google Apps Script làm backend.
 
